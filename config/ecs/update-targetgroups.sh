@@ -15,6 +15,11 @@ grafana_target_group_arn=$(aws elbv2 describe-target-groups --names $grafana_tar
 #Get registered ip address with web target group
 registered_ip=$(aws elbv2 describe-target-health --target-group-arn $web_target_group_arn --query "TargetHealthDescriptions[0].Target.Id" --output=text)
 
+prom_registered_ip=$(aws elbv2 describe-target-health --target-group-arn $prom_target_group_arn --query "TargetHealthDescriptions[0].Target.Id" --output=text)
+aws elbv2 deregister-targets --target-group-arn $prom_target_group_arn --targets Id=$prom_registered_ip,Port=9090
+
+grafana_registered_ip=$(aws elbv2 describe-target-health --target-group-arn $grafana_target_group_arn --query "TargetHealthDescriptions[0].Target.Id" --output=text)
+aws elbv2 deregister-targets --target-group-arn $grafana_target_group_arn --targets Id=$grafana_registered_ip,Port=3000
 
 aws elbv2 register-targets --target-group-arn $prom_target_group_arn --targets Id=$registered_ip,Port=9090
 aws elbv2 register-targets --target-group-arn $grafana_target_group_arn --targets Id=$registered_ip,Port=3000

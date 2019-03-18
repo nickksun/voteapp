@@ -33,7 +33,7 @@ Parameters:
   VoteDatabaseHttpProxyImage:
     Type: String
     Description: Vote App Database HTTP Proxy image
-    Default: "subfuzion/vote-database-proxy:1.0.19"
+    Default: "845547522342.dkr.ecr.us-west-2.amazonaws.com/vote-database-proxy:1.1.2"
 
   VoteDatabaseImage:
     Type: String
@@ -43,27 +43,27 @@ Parameters:
   VoteVotesImage:
     Type: String
     Description: Vote App Votes image
-    Default: "subfuzion/vote-votes:1.0.19"
+    Default: "845547522342.dkr.ecr.us-west-2.amazonaws.com/vote-votes:1.1.2"
 
   VoteReportsImage:
     Type: String
     Description: Vote App Reports image
-    Default: "subfuzion/vote-reports:1.0.19"
+    Default: "845547522342.dkr.ecr.us-west-2.amazonaws.com/vote-reports:1.1.2"
   
   VoteReportsV2Image:
     Type: String
     Description: Vote App Reports v2 image
-    Default: "subfuzion/vote-reports:1.0.19-2"
+    Default: "845547522342.dkr.ecr.us-west-2.amazonaws.com/vote-reports:1.1.2-2"
 
   VoteWebImage:
     Type: String
     Description: Vote App Web image
-    Default: "subfuzion/vote-web:1.0.19"
+    Default: "845547522342.dkr.ecr.us-west-2.amazonaws.com/vote-web:1.1.2"
   
   CloudWatchAgentImage:
     Type: String
     Description: CloudWatch Agent image
-    Default: "subfuzion/vote-cw-agent:1.0.19"
+    Default: "845547522342.dkr.ecr.us-west-2.amazonaws.com/vote-cw-agent:1.1.2"
 
   XRayImageUrl:
     Type: String

@@ -1,5 +1,4 @@
 #!/bin/bash
-sudo yum -y install expect
 trap "exit" INT
 while true
 do
