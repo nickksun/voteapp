@@ -28,7 +28,11 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 // install x-ray tracing
-app.use(xrayExpress.openSegment('reports.app'));
+if (process.env.VERSION && process.env.VERSION.startsWith("2")) {
+  app.use(xrayExpress.openSegment('reports_v2.app'));
+} else {
+  app.use(xrayExpress.openSegment('reports.app'));
+}
 
 // root route handler
 app.get('/', (_, res) => {
