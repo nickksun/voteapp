@@ -1,4 +1,3 @@
-const Database = require('@subfuzion/database').Database;
 const express= require('express');
 const http = require('http');
 const morgan = require('morgan');
@@ -10,6 +9,8 @@ xray.middleware.disableCentralizedSampling();
 const port = process.env.PORT || 3000;
 const app = express();
 const server = http.createServer(app);
+
+const Database = require('./lib/DynamoDB');
 
 let databaseConfig = Database.createStdConfig();
 let db;
@@ -65,9 +66,9 @@ app.use(xrayExpress.closeSegment());
   try {
     // initialize database client for querying vote results
     db = new Database(databaseConfig);
-    console.log(`connecting to database at (${db.connectionURL})`);
+    console.log(`connecting to database at... (${db.connectionURL})`);
     await db.connect();
-    console.log(`connected to database (${db.connectionURL})`);
+    console.log(`connected to database at... (${db.connectionURL})`);
     server.listen(port, () => console.log(`listening on port ${port}`));
   } catch (err) {
     console.log(err);

@@ -1,6 +1,4 @@
-// const Backoff = require('./Backoff');
 const defaults = require('./defaults');
-// const mongodb = require('mongodb');
 const uuid = require('uuid/v1');
 
 const AWS = require('aws-sdk');
@@ -10,10 +8,10 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient({
   region: AWS_DEPLOY_REGION
 });
 
-const Client = mongodb.MongoClient;
+// const Client = mongodb.MongoClient;
 
 // The `votes` collection
-const VOTES = 'votes';
+// const VOTES = 'votes';
 
 class Database {
   /**
@@ -83,7 +81,9 @@ class Database {
    * if present, else returns generated string based on host, port, and db properties.
    * @return {string}
    */
-  // get connectionURL() {
+  get connectionURL() {
+    return this._config.db;
+  }
   //   return this.config.uri ?
   //     this.config.uri :
   //     this.config.url ?
@@ -187,18 +187,19 @@ class Database {
     if (!vote.voter_id) {
       vote.voter_id = uuid();
     }
-
+    
     const params = {
       TableName: this._config.db,
       Item: {
         voter_id: vote.voter_id,
+        timestamp: Date.now(),
         vote: vote.vote
       }
-    }
+    };
 
     try {
-      const data = await this.client.put(params).promise();
-      return data
+      await this.client.put(params).promise();
+      return params.Item;
     } catch (error) {
       throw new Error(JSON.stringify(error));
     }
@@ -222,30 +223,31 @@ class Database {
     try {
       const paramsA = {
         TableName: this._config.db,
-        KeyConditionExpression: "#vote = :vote",
+        KeyConditionExpression: '#vote = :vote',
         ExpressionAttributeNames: {
-          "#vote": "vote"
+          '#vote': 'vote'
         },
         ExpressionAttributeValues: {
-          ":vote": "a"
+          ':vote': 'a'
         }
       };
       const paramsB = {
         TableName: this._config.db,
-        KeyConditionExpression: "#vote = :vote",
+        KeyConditionExpression: '#vote = :vote',
         ExpressionAttributeNames: {
-          "#vote": "vote"
+          '#vote': 'vote'
         },
         ExpressionAttributeValues: {
-          ":vote": "b"
+          ':vote': 'b'
         }
       };
       let resultA = await this.client.query(paramsA).promise();
       let resultB = await this.client.query(paramsB).promise();
+      console.log(resultA);
       return {
         a: resultA.Items.length,
         b: resultB.Items.length
-      }
+      };
     } catch (error) {
       throw new Error(JSON.stringify(error));
 
@@ -264,18 +266,18 @@ class Database {
 module.exports = Database;
 
 // validate configs before accepting
-function checkConfig(c) {
-  let errors = [];
-  if (!c.url || !c.uri) {
-    // if (!c.host) errors.push('host');
-    // if (!c.port) errors.push('port');
-    if (!c.db) errors.push('db');
-  }
-  if (errors.length) {
-    // don't forget to update test if error string is updated
-    throw new Error(`Invalid config. Provide a valid url (or uri) property value, or else valid values for the following: ${errors.join(', ')}`);
-  }
-}
+// function checkConfig(c) {
+//   let errors = [];
+//   if (!c.url || !c.uri) {
+//     // if (!c.host) errors.push('host');
+//     // if (!c.port) errors.push('port');
+//     if (!c.db) errors.push('db');
+//   }
+//   if (errors.length) {
+//     // don't forget to update test if error string is updated
+//     throw new Error(`Invalid config. Provide a valid url (or uri) property value, or else valid values for the following: ${errors.join(', ')}`);
+//   }
+// }
 
 // validate votes before accepting
 function checkVote(vote) {
