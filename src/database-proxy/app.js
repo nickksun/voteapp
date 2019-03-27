@@ -38,6 +38,7 @@ app.post('/vote', async (req, res) => {
     console.log('stored :', result);
     res.send({ success: true, result: {
       voter_id: result.voter_id,
+      timestamp: result.timestamp,
       vote: result.vote
     }});
   } catch (err) {

@@ -162,15 +162,8 @@ Resources:
               Value: "9080"
             - Name: "DATABASE_URI"
               Value: "mongodb://localhost:27017/voting"
-        - Name: mongo
-          Image: !Ref 'VoteDatabaseImage'
-          LogConfiguration:
-            LogDriver: 'awslogs'
-            Options:
-              awslogs-group:
-                'Fn::ImportValue': !Sub "${EnvironmentName}:ECSServiceLogGroup"
-              awslogs-region: !Ref "AWS::Region"
-              awslogs-stream-prefix: database
+            - Name: "AWS_DEPLOY_REGION"
+              Value: !Ref "AWS::Region"
         - Name: xray-daemon
           Essential: false
           Cpu: 32
